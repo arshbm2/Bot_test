@@ -1,4 +1,4 @@
-from src.nodes.analytics_agent.graph import app
+from graph import app
 import time 
 import logging
 
@@ -37,7 +37,7 @@ inputs = {
     #     #     "answer": "For which specific quarter would you like the aggregated call reach data?"
     #     # }
     ],
-    "question":"what is the most amazing region?",
+    "question":"How many HCPs received ≥3 calls per quarter but contributed < 5% of quarterly sales consistently?",
 }
 
 print("Processing your query...")

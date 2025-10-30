@@ -1,13 +1,13 @@
 from langchain_core.tools import tool
-from ...core.database.sql_db_setup import get_sql_database
+from core.database.sql_db_setup import get_sql_database
 from pydantic import BaseModel, Field
 import json
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from dotenv import load_dotenv
 import os
-from .utils import clean_sql_query
-from .models import QueryAnalysis
+from utils import clean_sql_query
+from models import QueryAnalysis
 load_dotenv()
 
 # Initialize database connection
