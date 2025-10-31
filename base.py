@@ -89,12 +89,12 @@ def get_relevant_tables_via_llm(history, question: str) -> list[str]:
     return valid_tables
 
 def retrieve_and_process_tables(state: State):
-    print(f"[DEBUG] retrieve_and_process_tables - incoming messages count: {len(state.get('messages', []))}")
-    for i, msg in enumerate(state.get('messages', [])):
-        print(f"  Message {i}: {type(msg).__name__}")
+    # print(f"[DEBUG] retrieve_and_process_tables - incoming messages count: {len(state.get('messages', []))}")
+    # for i, msg in enumerate(state.get('messages', [])):
+    #     print(f"  Message {i}: {type(msg).__name__}")
     
-    print(f"[DEBUG] retrieve_and_process_tables - state keys: {list(state.keys())}")
-    print(f"[DEBUG] retrieve_and_process_tables - question from state: '{state.get('question', 'NOT FOUND')}'")
+    # print(f"[DEBUG] retrieve_and_process_tables - state keys: {list(state.keys())}")
+    # print(f"[DEBUG] retrieve_and_process_tables - question from state: '{state.get('question', 'NOT FOUND')}'")
     
     history = "\n---\n".join([
         f"Q: {conv['question']}\nA: {conv.get('answer', '')}" 
@@ -102,7 +102,7 @@ def retrieve_and_process_tables(state: State):
     ])    
     user_input=state["question"]
     
-    print(f"[DEBUG] retrieve_and_process_tables - using question: '{user_input}'")
+    # print(f"[DEBUG] retrieve_and_process_tables - using question: '{user_input}'")
 
 
     llm_tables = get_relevant_tables_via_llm(history, user_input)
@@ -112,14 +112,14 @@ def retrieve_and_process_tables(state: State):
     
     # Clean and deduplicate
     unique_tables = clean_and_limit_tables(all_tables)
-    print(f"[DEBUG] Final unique tables: {unique_tables}")
+    # print(f"[DEBUG] Final unique tables: {unique_tables}")
 
 
     # Use the new get_metadata function instead of inline metadata creation
     metadata_section = get_metadata(unique_tables)
     examples_str=get_similar_examples(user_input, state.get("conversation", []), k=5)
 
-    print(f"[DEBUG] retrieve_and_process_tables - metadata length: {len(metadata_section)}, examples length: {len(examples_str)}")
+    # print(f"[DEBUG] retrieve_and_process_tables - metadata length: {len(metadata_section)}, examples length: {len(examples_str)}")
     
     return {
         "question": user_input,
@@ -290,7 +290,7 @@ def complexity_analysis_node(state: State):
     Analyzes question complexity to determine if iterative decomposition is needed.
     """
     try:
-        print(f"[DEBUG] complexity_analysis_node - Analyzing question complexity")
+        # print(f"[DEBUG] complexity_analysis_node - Analyzing question complexity")
         
         question = state.get("question", "")
         table_metadata = state.get("table_metadata", "")
@@ -314,9 +314,9 @@ def complexity_analysis_node(state: State):
         structured_llm = llm.with_structured_output(ComplexityAnalysis)
         complexity_analysis = structured_llm.invoke(complexity_prompt)
         
-        print(f"[DEBUG] Complexity Analysis - Needs Decomposition: {complexity_analysis.needs_decomposition}")
-        print(f"[DEBUG] Complexity Analysis - Complexity Score: {complexity_analysis.complexity_score}")
-        print(f"[DEBUG] Complexity Analysis - Suggested Approach: {complexity_analysis.suggested_approach}")
+        # print(f"[DEBUG] Complexity Analysis - Needs Decomposition: {complexity_analysis.needs_decomposition}")
+        # print(f"[DEBUG] Complexity Analysis - Complexity Score: {complexity_analysis.complexity_score}")
+        # print(f"[DEBUG] Complexity Analysis - Suggested Approach: {complexity_analysis.suggested_approach}")
         
         return {
             "complexity_analysis": complexity_analysis,
@@ -341,14 +341,14 @@ def decomposition_node(state: State):
     Breaks down complex questions into sub-questions using MAG-SQL decomposition approach.
     """
     try:
-        print(f"[DEBUG] decomposition_node - Breaking down complex question using MAG-SQL approach")
+        # print(f"[DEBUG] decomposition_node - Breaking down complex question using MAG-SQL approach")
         
         question = state.get("question", "")
         table_metadata = state.get("table_metadata", "")
         complexity_analysis = state.get("complexity_analysis")
         
         if not complexity_analysis or not complexity_analysis.needs_decomposition:
-            print(f"[DEBUG] decomposition_node - No decomposition needed, skipping")
+            # print(f"[DEBUG] decomposition_node - No decomposition needed, skipping")
             return {}
         
         # Format conversation history
@@ -371,8 +371,8 @@ def decomposition_node(state: State):
         response = llm.invoke(decomposition_prompt)
         decomposition_text = response.content
         
-        print(f"[DEBUG] MAG-SQL Decomposition Response:")
-        print(f"[DEBUG] {decomposition_text}")
+        # print(f"[DEBUG] MAG-SQL Decomposition Response:")
+        # print(f"[DEBUG] {decomposition_text}")
         
         # return decomposition_text #Arsh's debug step
         # Parse MAG-SQL style decomposition response
@@ -416,14 +416,14 @@ def decomposition_node(state: State):
             estimated_iterations=len(sub_questions)
         )
         
-        print(f"[DEBUG] Parsed Decomposition Plan - Sub-questions: {len(decomposition_plan.sub_questions)}")
-        print(f"[DEBUG] Parsed Decomposition Plan - Execution Order: {decomposition_plan.execution_order}")
+        # print(f"[DEBUG] Parsed Decomposition Plan - Sub-questions: {len(decomposition_plan.sub_questions)}")
+        # print(f"[DEBUG] Parsed Decomposition Plan - Execution Order: {decomposition_plan.execution_order}")
         
         # Log each sub-question for better debugging
-        for i, sub_q in enumerate(decomposition_plan.sub_questions):
-            print(f"[DEBUG] Sub-question {i+1}: {sub_q.question}")
-            print(f"[DEBUG] Sub-question {i+1} Purpose: {sub_q.purpose}")
-            print(f"[DEBUG] Sub-question {i+1} Dependencies: {sub_q.dependencies}")
+        # for i, sub_q in enumerate(decomposition_plan.sub_questions):
+            # print(f"[DEBUG] Sub-question {i+1}: {sub_q.question}")
+            # print(f"[DEBUG] Sub-question {i+1} Purpose: {sub_q.purpose}")
+            # print(f"[DEBUG] Sub-question {i+1} Dependencies: {sub_q.dependencies}")
         
         return {
             "decomposition_plan": decomposition_plan,

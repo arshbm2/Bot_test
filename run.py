@@ -1,6 +1,7 @@
 from graph import app
 import time 
 import logging
+import pandas as pd
 
 # Suppress debug output by setting logging level to WARNING
 logging.getLogger().setLevel(logging.WARNING)
@@ -40,17 +41,55 @@ inputs = {
     "question":"How many HCPs received ≥3 calls per quarter but contributed < 5% of quarterly sales consistently?",
 }
 
-print("Processing your query...")
-print("=" * 50)
+it_results = []
 
-start = time.time()
-messages = app.invoke(inputs)
-end = time.time()
+def get_output(app, inputs, it_results):
 
-# Extract and print the clean answer
-final_answer = extract_final_answer(messages)
-print(final_answer)
+    for event in app.stream(inputs):
+        node_name = list(event.keys())[0]         # e.g. "retrieve_and_process"
+        state = event[node_name]   
+        print(state.keys())   
+        if node_name == "iterative_execution":
+            # print(f"[Debug - AA] Node executed: {node_name}")
+            # print(state["iteration_results"][0].sql_query)
+            original_question = state["decomposition_plan"].original_question
+            print(f"original_question: {original_question};")
+            print(f"Length of iteration results: {len(state['iteration_results'])}")
+            # break
+            
+            subq_index = len(state["iteration_results"]) - 1
+            sub_question = state["decomposition_plan"].sub_questions[subq_index].question
+            sub_query = state["iteration_results"][subq_index].sql_query
+            #current row for the final dataframe
+            curr_row = {'Question': original_question,
+                        'Sub Question Index': subq_index,
+                        'Sub Question': sub_question,
+                        'SQL Query': sub_query}
+            it_results.append(curr_row)
 
-print("=" * 50)
-print(f"Execution time: {end-start:.2f} seconds")
+    return it_results
 
+test_questions = pd.read_excel("L3_questions.xlsx")['Question'].tolist()
+
+for i in range(len(test_questions)):
+    inputs = {
+        "messages": "",
+        "conversation": [],
+        "question":test_questions[i],
+    }
+    print(f"Processing question {i+1}/{len(test_questions)}: {test_questions[i]}")
+    try:
+        it_results = get_output(app, inputs, it_results)
+        time.sleep(1)  # brief pause between questions
+    except Exception as e:
+        row = {'Question': test_questions[i],
+               'Sub Question Index': -1,
+               'Sub Question': '',
+               'SQL Query': f"Error: {str(e)}"}
+        it_results.append(row)
+    # break
+
+it_results_df = pd.DataFrame(it_results)
+it_results_df.to_csv("iteration_results_qc.csv", index=False)
+print("Saved iteration results to iteration_results.csv")
+  
