@@ -224,6 +224,7 @@ table_retrieval_prompt='''
     ## CONTEXT & AVAILABLE INFORMATION
     Available tables and descriptions:{tables_info}
     Conversation history: {history}
+    User question: {question}
 
     ## YOUR TASK:
     Use the question and conversation history to select the minimal set of tables needed to answer the user's question.

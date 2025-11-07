@@ -38,7 +38,7 @@ inputs = {
     #     #     "answer": "For which specific quarter would you like the aggregated call reach data?"
     #     # }
     ],
-    "question":"How many HCPs received ≥3 calls per quarter but contributed < 5% of quarterly sales consistently?",
+    "question":"How many HCPs received  a call for the first time in 2025 and also wrote a script in the same year for the first time?"
 }
 
 it_results = []
@@ -49,13 +49,18 @@ def get_output(app, inputs, it_results):
         node_name = list(event.keys())[0]         # e.g. "retrieve_and_process"
         state = event[node_name]   
         print(state.keys())   
+        # if node_name == "retrieve_and_process":
+        #     print(f"[Debug - AA] retrieve_and_process_tables node")
+        #     print(f"[Debug - AA] Table metadata length: {state['table_metadata']}")
+        #     print(f"[Debug - AA] Examples string length: {state['examples_str']}")
         if node_name == "iterative_execution":
+            # print(f"[Debug - AA] Iterative execution node")
             # print(f"[Debug - AA] Node executed: {node_name}")
             # print(state["iteration_results"][0].sql_query)
             original_question = state["decomposition_plan"].original_question
-            print(f"original_question: {original_question};")
-            print(f"Length of iteration results: {len(state['iteration_results'])}")
-            # break
+            # print(f"original_question: {original_question};")
+            # print(f"Length of iteration results: {len(state['iteration_results'])}")
+            # # break
             
             subq_index = len(state["iteration_results"]) - 1
             sub_question = state["decomposition_plan"].sub_questions[subq_index].question
@@ -69,27 +74,29 @@ def get_output(app, inputs, it_results):
 
     return it_results
 
+it_results = get_output(app, inputs, it_results)
+print(f"Debug - AA iteration results {it_results}")
+
 test_questions = pd.read_excel("L3_questions.xlsx")['Question'].tolist()
 
-for i in range(len(test_questions)):
-    inputs = {
-        "messages": "",
-        "conversation": [],
-        "question":test_questions[i],
-    }
-    print(f"Processing question {i+1}/{len(test_questions)}: {test_questions[i]}")
-    try:
-        it_results = get_output(app, inputs, it_results)
-        time.sleep(1)  # brief pause between questions
-    except Exception as e:
-        row = {'Question': test_questions[i],
-               'Sub Question Index': -1,
-               'Sub Question': '',
-               'SQL Query': f"Error: {str(e)}"}
-        it_results.append(row)
-    # break
+# for i in range(len(test_questions)):
+#     inputs = {
+#         "messages": "",
+#         "conversation": [],
+#         "question":test_questions[i],
+#     }
+#     print(f"Processing question {i+1}/{len(test_questions)}: {test_questions[i]}")
+#     try:
+#         it_results = get_output(app, inputs, it_results)
+#         time.sleep(1)  # brief pause between questions
+#     except Exception as e:
+#         row = {'Question': test_questions[i],
+#                'Sub Question Index': -1,
+#                'Sub Question': '',
+#                'SQL Query': f"Error: {str(e)}"}
+#         it_results.append(row)
+#     # break
 
-it_results_df = pd.DataFrame(it_results)
-it_results_df.to_csv("iteration_results_qc.csv", index=False)
-print("Saved iteration results to iteration_results.csv")
-  
+# it_results_df = pd.DataFrame(it_results)
+# it_results_df.to_csv("iteration_results v4 test.csv", index=False)
+# print("Saved iteration results to iteration_results v4.csv")

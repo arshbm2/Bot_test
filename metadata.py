@@ -98,7 +98,8 @@ table_descriptions={
         Key fields include Record_ID, Event, Event_ID, NPI, Date, Week_Ending_Date, Week_Number, Month, Quarter, Quarter_Start_Date, Quarter_End_Date, Year,  
         Channel, Engagement_type, Publisher, Speaker_Name, Event_Type, Event_City,Event_State, HCP_ID, HCP_Name, HCP_Address, HCP_City, HCP_State, HCP_ZIP,
         HCP_Specialty, HCP_Specialty_Group, HCP_Decile, HCP_Segment, Target_Flag, AMA_Flag, PDRP_Flag, KOL, Email, Phone_number,  Territory_ID, Territory_Name, Region_ID, Region_Name, Area_ID, Area_Name""" 
-    ), 
+    )
+    , 
 
     "L2_Patient_Status_Summary_Table_v2": ( 
         """The table contains detailed information about patient status updates, including patient demographics, status details, specialty pharmacy information, and time dimensions. It supports patient care tracking, referral management, and status monitoring in a healthcare or pharmaceutical context. This table should be used to track the status of the patient.	 " 
