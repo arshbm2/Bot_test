@@ -41,7 +41,8 @@ workflow.add_edge("retrieve_and_process", "analyze_complexity")  # Retrieve to C
 # Routing function for complexity analysis
 def route_after_complexity_analysis(state: State):
     """Route after complexity analysis to determine approach"""
-    use_iterative = state.get("use_iterative_approach", False)
+    # use_iterative = state.get("use_iterative_approach", False)
+    use_iterative = True # Force iterative approach for testing
     
     if use_iterative:
         logger.debug("Complex question detected, routing to decomposition")

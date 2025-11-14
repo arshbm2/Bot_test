@@ -38,7 +38,7 @@ inputs = {
     #     #     "answer": "For which specific quarter would you like the aggregated call reach data?"
     #     # }
     ],
-    "question":"How many HCPs received  a call for the first time in 2025 and also wrote a script in the same year for the first time?"
+    "question":"What is the lag (in weeks) between a first call and the first subsequent Rx by HCP specialty?"
 }
 
 it_results = []
@@ -77,7 +77,7 @@ def get_output(app, inputs, it_results):
 it_results = get_output(app, inputs, it_results)
 print(f"Debug - AA iteration results {it_results}")
 
-test_questions = pd.read_excel("L3_questions.xlsx")['Question'].tolist()
+# test_questions = pd.read_excel("L3_questions.xlsx")['Question'].tolist()
 
 # for i in range(len(test_questions)):
 #     inputs = {
@@ -98,5 +98,5 @@ test_questions = pd.read_excel("L3_questions.xlsx")['Question'].tolist()
 #     # break
 
 # it_results_df = pd.DataFrame(it_results)
-# it_results_df.to_csv("iteration_results v4 test.csv", index=False)
-# print("Saved iteration results to iteration_results v4.csv")
+# it_results_df.to_csv("iteration_results v6 test.csv", index=False)
+# print("Saved iteration results to iteration_results v6.csv")

@@ -25,7 +25,7 @@ def execute_db_query(query: str) -> dict:
     """
     Execute a SQL query against the SQLite database and get back the result.
     """
-    print("Query: ", query)
+    # print("Query: ", query)
     with open("queries.txt", "a") as file:
         file.write("\n-----------------------------------------------------------------------\n")
         file.write("Query:\n")

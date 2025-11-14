@@ -401,464 +401,465 @@ Table_Metadata  ={
     - "Month": TEXT – Month of the shipment, e.g., 'Jan-2024', 'Feb-2025', 'Mar-2024', 'Apr-2024', 'Jun-2025', 'Jul-2024'. Use this field if the question specifies a month, such as the latest month, recent month, or a specific month (e.g., Jan 2024). 
     - "Quarter": TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December). This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on. Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1-2024). 
     - "Year": INTEGER – Year of the shipment. Use this field if the question specifies a year, such as the latest year, recent year, or a specific year (e.g., 2024). 
-    """, 
+    """
+    # , 
 
  
 
-"L2_HCP_Events_Table_v2": """Stores detailed information about events involving healthcare providers, such as speaker programs, capturing event details, healthcare provider participation, geographical hierarchy, and time dimensions to support marketing analysis, event tracking, and territory management in a healthcare or pharmaceutical context. 
-    Here is the schema information of the Table along with descriptions of each column: 
-   - "Record_ID": TEXT – Unique identifier for the event record.  
-    - "Event": TEXT – Name or type of the event, e.g., 'Speaker Program'. We should filter the table on this column based on the event of interest. 
-    - "Event_ID": TEXT – Unique identifier for the event.  
-    - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.   
-    - "Date": DATE– Date when the event occurred.  
-    - "Week_Ending_Date": DATE – Closing date of the recorded week, marking the end of the data period. stored as a string in MM-DD-YYYY format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this.   
-    - "Week_Number": TEXT – Week number, e.g., 'W1-2024'.  
-    - "Month": TEXT – Month of the event, e.g., 'Jan-24'. Use this field if the question specifies a month, such as the latest month, recent month, or a specific month (e.g., Jan 2024).  
-    - "Quarter": TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December). This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on. Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1 2024). 
-    - "Quarter_Start_Date": DATE – Start date of the quarter.  
-    - "Quarter_End_Date": DATE – End date of the quarter.  
-    - "Year": INTEGER – Year of the event. Use this field if the question specifies a year, such as the latest year, recent year, or a specific year (e.g., 2024).  
-    - "Channel": TEXT – Channel through which the event was conducted, if applicable. Channel Information is available only in Email and Digital Campaigns, so this field is populated only when the Event is ‘Email Campaign’ or ‘Digital Campaign’. For Speaker Program records, it is shown as a blank.  
-    - "Engagement_type": TEXT – Type of engagement, if specified. This Information is available only in Email and Digital Campaigns, so this field is populated only when the Event is ‘Email Campaign’ or ‘Digital Campaign’. For Speaker Program records, it is shown as a blank. 
-    - "Publisher": TEXT – Publisher or organizer of the event, if applicable. Publisher Information is available only in Email and Digital Campaigns, so this field is populated only when the Event is ‘Email Campaign’ or ‘Digital Campaign’. For Speaker Program records, it is shown as a blank. 
-    - "Speaker_Name": TEXT – Name of the speaker at the event, e.g., 'Ethan Lee'. This Information is available only in Speaker Program, so this field is populated only when the Event is ‘Speaker Program’. For other records, it is shown as a blank.  
-    - "Event_Type": TEXT – Type of event, e.g., 'In-Person'. This Information is available only in Speaker Program, so this field is populated only when the Event is ‘Speaker Program’. For other records, it is shown as a blank. 
-    - "Event_City": TEXT – City where the event took place. This Information is available only in Speaker Program, so this field is populated only when the Event is ‘Speaker Program’. For other records, it is shown as a blank. 
-    - "Event_State": TEXT – State where the event took place. This Information is available only in Speaker Program, so this field is populated only when the Event is ‘Speaker Program’. For other records, it is shown as a blank.  
-    - "HCP_ID": TEXT – Unique identifier for the healthcare provider.  
-    - "HCP_Name": TEXT – Name of the healthcare professional. Terms like HCP, healthcare provider, doctor or MD are used synonymously with healthcare professionals.   
-    - "HCP_Address": TEXT – Complete US address where the healthcare professional practices.    
-    - "HCP_City": TEXT – US City where the healthcare provider is located.  
-    - "HCP_State": TEXT – US State where the healthcare professional's practice is located. This field contains the abbreviations for U.S. state names, such as NY for New York, FL for Florida, TX for Texas, CA for California, IL for Illinois, NC for North Carolina, ND for North Dakota, KY for Kentucky, NJ for New Jersey, NM for New Mexico, MT for Montana, WA for Washington, GA for Georgia, and so on.  
-    - "HCP_ZIP": INTEGER – US Postal code of the healthcare professional's practice. These are postal codes are generally of 5 digits   
-    - "HCP_Specialty": TEXT – Medical specialty of the healthcare professional, helping to understand the areas of expertise. This column identifies the area in which the HCP is certified, licensed, or primarily operates. 
-    - "HCP_Specialty_Group": TEXT – Group of the specialty, e.g., 'Oncs' for oncologists. Include "FM/IM" for Family Medicine/Internal Medicine, "NP/PA" for Nurse Practitioner/Physician Assistant, "Oncs" for Oncologists, "PCP" for Primary Care Physicians, and "Others" for all other specialties not separately listed. 
-    - "HCP_Decile": INTEGER – Decile ranking of the healthcare provider.  
-    - "HCP_Segment": TEXT – Segment classification of the healthcare provider, e.g., 'L' or 'H'.  
-    - "Target_Flag": TEXT – Indicates if the HCP is identified as a target for the sales representatives to call on or reach. Eg. Y or N. 
-    - "AMA_Flag": TEXT – American Medical Association flag, possibly indicating membership or status. 
-    - "PDRP_Flag": TEXT – Flag for participation in a program, possibly related to data sharing or privacy. 
-    - "KOL": TEXT – Indicates if the healthcare provider is a Key Opinion Leader, e.g., 'Y' or 'N'.  
-    - "Email": TEXT – Email address of the healthcare provider. 
-    - "Phone_number": INTEGER – Phone number of the healthcare provider. 
-    - "Territory_ID": TEXT – Identifier for the sales territory.  
-    - "Territory_Name": TEXT – Specifies the sales or operational territory of the account. The territory is used synonymously with "Region" and refers to a specific geographical area assigned in which the sales representatives operate, e.g., 'Springfield-Providence'.  
-    - "Region_ID": TEXT – Identifier for the region.  
-    - "Region_Name": TEXT – Name of the region, e.g., 'New England'.  
-    - "Area_ID": TEXT – Identifier for the area.  
-    - "Area_Name": TEXT – Name of the area, e.g., 'East'.  
-    """, 
+# "L2_HCP_Events_Table_v2": """Stores detailed information about events involving healthcare providers, such as speaker programs, capturing event details, healthcare provider participation, geographical hierarchy, and time dimensions to support marketing analysis, event tracking, and territory management in a healthcare or pharmaceutical context. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#    - "Record_ID": TEXT – Unique identifier for the event record.  
+#     - "Event": TEXT – Name or type of the event, e.g., 'Speaker Program'. We should filter the table on this column based on the event of interest. 
+#     - "Event_ID": TEXT – Unique identifier for the event.  
+#     - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.   
+#     - "Date": DATE– Date when the event occurred.  
+#     - "Week_Ending_Date": DATE – Closing date of the recorded week, marking the end of the data period. stored as a string in MM-DD-YYYY format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this.   
+#     - "Week_Number": TEXT – Week number, e.g., 'W1-2024'.  
+#     - "Month": TEXT – Month of the event, e.g., 'Jan-24'. Use this field if the question specifies a month, such as the latest month, recent month, or a specific month (e.g., Jan 2024).  
+#     - "Quarter": TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December). This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on. Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1 2024). 
+#     - "Quarter_Start_Date": DATE – Start date of the quarter.  
+#     - "Quarter_End_Date": DATE – End date of the quarter.  
+#     - "Year": INTEGER – Year of the event. Use this field if the question specifies a year, such as the latest year, recent year, or a specific year (e.g., 2024).  
+#     - "Channel": TEXT – Channel through which the event was conducted, if applicable. Channel Information is available only in Email and Digital Campaigns, so this field is populated only when the Event is ‘Email Campaign’ or ‘Digital Campaign’. For Speaker Program records, it is shown as a blank.  
+#     - "Engagement_type": TEXT – Type of engagement, if specified. This Information is available only in Email and Digital Campaigns, so this field is populated only when the Event is ‘Email Campaign’ or ‘Digital Campaign’. For Speaker Program records, it is shown as a blank. 
+#     - "Publisher": TEXT – Publisher or organizer of the event, if applicable. Publisher Information is available only in Email and Digital Campaigns, so this field is populated only when the Event is ‘Email Campaign’ or ‘Digital Campaign’. For Speaker Program records, it is shown as a blank. 
+#     - "Speaker_Name": TEXT – Name of the speaker at the event, e.g., 'Ethan Lee'. This Information is available only in Speaker Program, so this field is populated only when the Event is ‘Speaker Program’. For other records, it is shown as a blank.  
+#     - "Event_Type": TEXT – Type of event, e.g., 'In-Person'. This Information is available only in Speaker Program, so this field is populated only when the Event is ‘Speaker Program’. For other records, it is shown as a blank. 
+#     - "Event_City": TEXT – City where the event took place. This Information is available only in Speaker Program, so this field is populated only when the Event is ‘Speaker Program’. For other records, it is shown as a blank. 
+#     - "Event_State": TEXT – State where the event took place. This Information is available only in Speaker Program, so this field is populated only when the Event is ‘Speaker Program’. For other records, it is shown as a blank.  
+#     - "HCP_ID": TEXT – Unique identifier for the healthcare provider.  
+#     - "HCP_Name": TEXT – Name of the healthcare professional. Terms like HCP, healthcare provider, doctor or MD are used synonymously with healthcare professionals.   
+#     - "HCP_Address": TEXT – Complete US address where the healthcare professional practices.    
+#     - "HCP_City": TEXT – US City where the healthcare provider is located.  
+#     - "HCP_State": TEXT – US State where the healthcare professional's practice is located. This field contains the abbreviations for U.S. state names, such as NY for New York, FL for Florida, TX for Texas, CA for California, IL for Illinois, NC for North Carolina, ND for North Dakota, KY for Kentucky, NJ for New Jersey, NM for New Mexico, MT for Montana, WA for Washington, GA for Georgia, and so on.  
+#     - "HCP_ZIP": INTEGER – US Postal code of the healthcare professional's practice. These are postal codes are generally of 5 digits   
+#     - "HCP_Specialty": TEXT – Medical specialty of the healthcare professional, helping to understand the areas of expertise. This column identifies the area in which the HCP is certified, licensed, or primarily operates. 
+#     - "HCP_Specialty_Group": TEXT – Group of the specialty, e.g., 'Oncs' for oncologists. Include "FM/IM" for Family Medicine/Internal Medicine, "NP/PA" for Nurse Practitioner/Physician Assistant, "Oncs" for Oncologists, "PCP" for Primary Care Physicians, and "Others" for all other specialties not separately listed. 
+#     - "HCP_Decile": INTEGER – Decile ranking of the healthcare provider.  
+#     - "HCP_Segment": TEXT – Segment classification of the healthcare provider, e.g., 'L' or 'H'.  
+#     - "Target_Flag": TEXT – Indicates if the HCP is identified as a target for the sales representatives to call on or reach. Eg. Y or N. 
+#     - "AMA_Flag": TEXT – American Medical Association flag, possibly indicating membership or status. 
+#     - "PDRP_Flag": TEXT – Flag for participation in a program, possibly related to data sharing or privacy. 
+#     - "KOL": TEXT – Indicates if the healthcare provider is a Key Opinion Leader, e.g., 'Y' or 'N'.  
+#     - "Email": TEXT – Email address of the healthcare provider. 
+#     - "Phone_number": INTEGER – Phone number of the healthcare provider. 
+#     - "Territory_ID": TEXT – Identifier for the sales territory.  
+#     - "Territory_Name": TEXT – Specifies the sales or operational territory of the account. The territory is used synonymously with "Region" and refers to a specific geographical area assigned in which the sales representatives operate, e.g., 'Springfield-Providence'.  
+#     - "Region_ID": TEXT – Identifier for the region.  
+#     - "Region_Name": TEXT – Name of the region, e.g., 'New England'.  
+#     - "Area_ID": TEXT – Identifier for the area.  
+#     - "Area_Name": TEXT – Name of the area, e.g., 'East'.  
+#     """, 
 
  
 
-"L2_Patient_Status_Summary_Table_v2": """Stores detailed information about patient status updates, capturing patient demographics, status details, specialty pharmacy information, prescriber source, and time dimensions to support patient care tracking, referral management, and status monitoring in a healthcare or pharmaceutical context. 
-    Here is the schema information of the Table along with descriptions of each column: 
-    - "Record_ID": TEXT – Unique identifier for the status record.  
-    - "Patient_ID": INTEGER – Unique identifier for the patient.  
-    - "Gender": TEXT – Gender of the patient, e.g., 'Male' or 'Female'.  
-    - "Age": INTEGER – Age of the patient.  
-    - "Birth_Year": INTEGER – Year of birth of the patient.  
-    - "SP_ID": TEXT – Identifier for the specialty pharmacy, if applicable.  
-    - "SP_Name": TEXT – Name of the specialty pharmacy, if applicable.  
-    - "Status_Date": DATE Date when the status was updated.  
-    - "Week_Ending_Date": DATE – Closing date of the recorded week, marking the end of the data period. stored as a string in MM-DD-YYYY format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this.   
-    - "Week_Number": TEXT – Week number, e.g., 'W47-2023'.  
-    - "Month": TEXT – Month of the status update, e.g., 'Nov-23'. Use this field if the question specifies a month, such as the latest month, recent month, or a specific month (e.g., Jan 2024).  
-    - "Quarter": TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December).  This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on. Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1 2024). 
-    - "Quarter_Start_Date": DATE– Start date of the quarter.  
-    - "Quarter_End_Date": DATE End date of the quarter.  
-    - "Year": INTEGER – Year of the status update. Use this field if the question specifies a year, such as the latest year, recent year, or a specific year (e.g., 2024). 
-    - "Prescriber_Source": TEXT – Source of the prescription, e.g., 'Hub'.  
-    - "Status": TEXT – Current status of the patient, e.g., 'Pending'.  
-    - "Status_Code": TEXT – Code representing the status, e.g., 'P100'.  
-    - "Status_Description": TEXT – Description of the status, e.g., 'REFERRAL CREATED'.  
-  """, 
+# "L2_Patient_Status_Summary_Table_v2": """Stores detailed information about patient status updates, capturing patient demographics, status details, specialty pharmacy information, prescriber source, and time dimensions to support patient care tracking, referral management, and status monitoring in a healthcare or pharmaceutical context. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#     - "Record_ID": TEXT – Unique identifier for the status record.  
+#     - "Patient_ID": INTEGER – Unique identifier for the patient.  
+#     - "Gender": TEXT – Gender of the patient, e.g., 'Male' or 'Female'.  
+#     - "Age": INTEGER – Age of the patient.  
+#     - "Birth_Year": INTEGER – Year of birth of the patient.  
+#     - "SP_ID": TEXT – Identifier for the specialty pharmacy, if applicable.  
+#     - "SP_Name": TEXT – Name of the specialty pharmacy, if applicable.  
+#     - "Status_Date": DATE Date when the status was updated.  
+#     - "Week_Ending_Date": DATE – Closing date of the recorded week, marking the end of the data period. stored as a string in MM-DD-YYYY format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this.   
+#     - "Week_Number": TEXT – Week number, e.g., 'W47-2023'.  
+#     - "Month": TEXT – Month of the status update, e.g., 'Nov-23'. Use this field if the question specifies a month, such as the latest month, recent month, or a specific month (e.g., Jan 2024).  
+#     - "Quarter": TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December).  This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on. Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1 2024). 
+#     - "Quarter_Start_Date": DATE– Start date of the quarter.  
+#     - "Quarter_End_Date": DATE End date of the quarter.  
+#     - "Year": INTEGER – Year of the status update. Use this field if the question specifies a year, such as the latest year, recent year, or a specific year (e.g., 2024). 
+#     - "Prescriber_Source": TEXT – Source of the prescription, e.g., 'Hub'.  
+#     - "Status": TEXT – Current status of the patient, e.g., 'Pending'.  
+#     - "Status_Code": TEXT – Code representing the status, e.g., 'P100'.  
+#     - "Status_Description": TEXT – Description of the status, e.g., 'REFERRAL CREATED'.  
+#   """, 
 
  
 
-"L3_Enrollment_Table_v2": """Stores detailed information about patient enrollments, including enrollment dates, prescriber details, diagnosis codes, product information, prescription status, and payer details to support patient care tracking, prescription management, and financial analysis in a healthcare or pharmaceutical context. 
-Here is the schema information of the Table along with descriptions of each column: 
-    -"Enrollment_ID": TEXT – Unique identifier for the enrollment record.   
-    - "Patient_ID": INTEGER – Unique identifier for the patient.   
-    - "Enrollment_Date": DATE– Date when the patient was enrolled.   
-    - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.  
-    - "Prescriber_Source": TEXT – Source of the prescription, such as 'PRESCRIBER' or 'HUB'.   
-    - "ICD_Code": TEXT – International Classification of Diseases code for the diagnosis.   
-    - "Product_ID": TEXT – Unique identifier for the product.   
-    - "Product_Name": TEXT – Name of the product, e.g., 'Onc_Brand_A'.   
-    - "NDC": TEXT – National Drug Code for the product.  
-    - "Off_label_flag": TEXT – Indicates if the use is off-label, e.g., 'N' for no.   
-    - "Rx_No": TEXT – Prescription number, often hashed or encrypted for privacy.   
-    - "Authorized_Refills": INTEGER – Number of authorized refills for the prescription.   
-    - "Status": TEXT – Current status of the enrollment, e.g., 'Active'.   
-    - "Status_Code": TEXT – Code representing the status, e.g., 'PA0301' or 'A01'.   
-    - "Status_Description": TEXT – Description of the status, e.g., 'ACTIVE:ON THERAPY:SHIPMENT CONFIRMED' or 'Order Shipped'.   
-    - "Status_Date": TEXT – Date when the status was updated.   
-    - "Primary_Payer_ID": INTEGER – Identifier for the primary insurance payer.   
-    - "Primary_Payer_Name": TEXT – Name of the primary insurance payer, e.g., 'Hamaspik Choice'.  
-    - "Primary_Payer_Channel": TEXT – Categorization of the insurance types (Commercial, Medicare, Medicaid, Others) of primary payer.  
-    - "Primary_Copay": INTEGER – Copay amount for the primary payer.   
-    - "Primary_OOP": INTEGER – Out-of-pocket amount for the primary payer.   
-    - "Secondary_Payer_ID": INTEGER – Identifier for the secondary insurance payer.   
-    - "Secondary_Payer_Name": TEXT – Name of the secondary insurance payer, e.g., 'California Health'.   
-    - "Secondary_Payer_Channel": TEXT – Categorization of the insurance types (Commercial, Medicare, Medicaid, Others) of secondary payer.  
-    - "Secondary_Copay": INTEGER – Copay amount for the secondary payer.   
-    - "Secondary_OOP": INTEGER – Out-of-pocket amount for the secondary payer.  
-    """, 
+# "L3_Enrollment_Table_v2": """Stores detailed information about patient enrollments, including enrollment dates, prescriber details, diagnosis codes, product information, prescription status, and payer details to support patient care tracking, prescription management, and financial analysis in a healthcare or pharmaceutical context. 
+# Here is the schema information of the Table along with descriptions of each column: 
+#     -"Enrollment_ID": TEXT – Unique identifier for the enrollment record.   
+#     - "Patient_ID": INTEGER – Unique identifier for the patient.   
+#     - "Enrollment_Date": DATE– Date when the patient was enrolled.   
+#     - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.  
+#     - "Prescriber_Source": TEXT – Source of the prescription, such as 'PRESCRIBER' or 'HUB'.   
+#     - "ICD_Code": TEXT – International Classification of Diseases code for the diagnosis.   
+#     - "Product_ID": TEXT – Unique identifier for the product.   
+#     - "Product_Name": TEXT – Name of the product, e.g., 'Onc_Brand_A'.   
+#     - "NDC": TEXT – National Drug Code for the product.  
+#     - "Off_label_flag": TEXT – Indicates if the use is off-label, e.g., 'N' for no.   
+#     - "Rx_No": TEXT – Prescription number, often hashed or encrypted for privacy.   
+#     - "Authorized_Refills": INTEGER – Number of authorized refills for the prescription.   
+#     - "Status": TEXT – Current status of the enrollment, e.g., 'Active'.   
+#     - "Status_Code": TEXT – Code representing the status, e.g., 'PA0301' or 'A01'.   
+#     - "Status_Description": TEXT – Description of the status, e.g., 'ACTIVE:ON THERAPY:SHIPMENT CONFIRMED' or 'Order Shipped'.   
+#     - "Status_Date": TEXT – Date when the status was updated.   
+#     - "Primary_Payer_ID": INTEGER – Identifier for the primary insurance payer.   
+#     - "Primary_Payer_Name": TEXT – Name of the primary insurance payer, e.g., 'Hamaspik Choice'.  
+#     - "Primary_Payer_Channel": TEXT – Categorization of the insurance types (Commercial, Medicare, Medicaid, Others) of primary payer.  
+#     - "Primary_Copay": INTEGER – Copay amount for the primary payer.   
+#     - "Primary_OOP": INTEGER – Out-of-pocket amount for the primary payer.   
+#     - "Secondary_Payer_ID": INTEGER – Identifier for the secondary insurance payer.   
+#     - "Secondary_Payer_Name": TEXT – Name of the secondary insurance payer, e.g., 'California Health'.   
+#     - "Secondary_Payer_Channel": TEXT – Categorization of the insurance types (Commercial, Medicare, Medicaid, Others) of secondary payer.  
+#     - "Secondary_Copay": INTEGER – Copay amount for the secondary payer.   
+#     - "Secondary_OOP": INTEGER – Out-of-pocket amount for the secondary payer.  
+#     """, 
 
  
 
-"L3_Geography_v2": """Stores hierarchical geographical information defining areas, regions, and territories for sales and distribution purposes, supporting territory management, sales reporting, and resource allocation. 
-    Here is the schema information of the Table along with descriptions of each column: 
-    - "Area_ID": TEXT – Unique identifier for the area.  
-    - "Area_Name": TEXT – Name of the area, e.g., 'East'.  
-    - "Region_ID": TEXT – Unique identifier for the region within the area.  
-    - "Region_Name": TEXT – Name of the region, e.g., 'Kentucky'.   
-    - "Territory_ID": TEXT – Unique identifier for the territory within the region.  
-    - "Territory_Name": TEXT – Specifies the sales or operational territory of the account. The territory is used synonymously with "Region" and refers to a specific geographical area assigned in which the sales representatives operate, e.g., 'Atlanta'. 
-""", 
+# "L3_Geography_v2": """Stores hierarchical geographical information defining areas, regions, and territories for sales and distribution purposes, supporting territory management, sales reporting, and resource allocation. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#     - "Area_ID": TEXT – Unique identifier for the area.  
+#     - "Area_Name": TEXT – Name of the area, e.g., 'East'.  
+#     - "Region_ID": TEXT – Unique identifier for the region within the area.  
+#     - "Region_Name": TEXT – Name of the region, e.g., 'Kentucky'.   
+#     - "Territory_ID": TEXT – Unique identifier for the territory within the region.  
+#     - "Territory_Name": TEXT – Specifies the sales or operational territory of the account. The territory is used synonymously with "Region" and refers to a specific geographical area assigned in which the sales representatives operate, e.g., 'Atlanta'. 
+# """, 
 
-"L3_HCO_Master_v2": """Stores detailed information about healthcare organizations or accounts, including identifiers, addresses, classifications, and segmentation data to support account management, sales targeting, and reporting. 
-Here is the schema information of the Table along with descriptions of each column: 
-    - "Account_ID": INTEGER – Unique identifier for the account.   
-    - "Account_Name": TEXT – Identifies the Account name through which the healthcare product was sold. Terms such as Hospital or L1 are used synonymously with the term Account., e.g., 'ABDUL G. MUNDIA PHYSICIAN'.   
-    - "Account_Address": TEXT – The primary US street address of the account's main location.  
-    - "Account_City": TEXT – US City where the account is located.   
-    - "Account_State": TEXT – US state in which the account operates. This field contains the abbreviations for state names, for example, NY for New York, FL for Florida and so on.  
-    - "Account_ZIP": INTEGER – US Postal code for the account's location, essential for regional analysis. These postal codes are generally of 5 digits.  
-    - "Account_CoT": TEXT – Class of Trade which categorizes the type of business operation (e.g., Hospital, Clinic).    
-    - "Account_Decile": INTEGER – Decile ranking of the account, possibly indicating size or importance.   
-    - "Account_Segment": TEXT – Segment classification of the account, e.g., 'L'.  
-""", 
+# "L3_HCO_Master_v2": """Stores detailed information about healthcare organizations or accounts, including identifiers, addresses, classifications, and segmentation data to support account management, sales targeting, and reporting. 
+# Here is the schema information of the Table along with descriptions of each column: 
+#     - "Account_ID": INTEGER – Unique identifier for the account.   
+#     - "Account_Name": TEXT – Identifies the Account name through which the healthcare product was sold. Terms such as Hospital or L1 are used synonymously with the term Account., e.g., 'ABDUL G. MUNDIA PHYSICIAN'.   
+#     - "Account_Address": TEXT – The primary US street address of the account's main location.  
+#     - "Account_City": TEXT – US City where the account is located.   
+#     - "Account_State": TEXT – US state in which the account operates. This field contains the abbreviations for state names, for example, NY for New York, FL for Florida and so on.  
+#     - "Account_ZIP": INTEGER – US Postal code for the account's location, essential for regional analysis. These postal codes are generally of 5 digits.  
+#     - "Account_CoT": TEXT – Class of Trade which categorizes the type of business operation (e.g., Hospital, Clinic).    
+#     - "Account_Decile": INTEGER – Decile ranking of the account, possibly indicating size or importance.   
+#     - "Account_Segment": TEXT – Segment classification of the account, e.g., 'L'.  
+# """, 
 
-"L3_HCP_Master_v2": """Stores detailed information about healthcare providers, including identifiers, contact details, specialties, segmentation, flags for program participation or statuses, and Key Opinion Leader status to support HCP management, sales targeting, and marketing analysis in a healthcare or pharmaceutical context. 
-Here is the schema information of the Table along with descriptions of each column: 
-    - "HCP_ID": TEXT – Unique identifier for the healthcare provider.  
-    - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.  
-    - "HCP_Name": TEXT – Name of the healthcare professional. Terms like HCP, healthcare provider, doctor or MD are used synonymously with healthcare professionals.  e.g., 'PAUL TIMOTHY MORRIS'.  
-    - "HCP_Address": TEXT – Address of the healthcare provider.  
-    - "HCP_City": TEXT – US City where the healthcare provider is located.  
-    - "HCP_State": TEXT – State where the healthcare provider is located, e.g., 'HI'.  
-    - "HCP_ZIP": INTEGER – US Postal code of the healthcare professional's practice. These are postal codes are generally of 5 digits.  
-    - "HCP_Specialty": TEXT – This column identifies the area in which the HCP is certified, licensed, or primarily operates.   
-    - "HCP_Specialty_Group": TEXT – Group of the specialty. Include "FM/IM" for Family Medicine/Internal Medicine, "NP/PA" for Nurse Practitioner/Physician Assistant, "Oncs" for Oncologists, "PCP" for Primary Care Physicians, and "Others" for all other specialties not separately listed.   
-    - "HCP_Decile": INTEGER - Decile ranking of the healthcare provider.  
-    - "HCP_Segment": TEXT – Segment classification of the healthcare provider, e.g., 'M'.  
-    - "Target_Flag": TEXT – Indicates if the HCP is identified as a target for the sales representatives to call on or reach. Eg. Y or N  
-    - "AMA_Flag": TEXT – American Medical Association flag, possibly indicating membership or status.  
-    - "PDRP_Flag": TEXT – Flag for participation in a program, possibly related to data sharing or privacy.  
-    - "Email": TEXT – Email address of the healthcare provider.  
-    - "Phone_number": INTEGER – Phone number of the healthcare provider.  
-    - "KOL": TEXT – Indicates if the healthcare provider is a Key Opinion Leader, e.g., 'Y' or 'N'.  
-    """, 
-
- 
-
-"L3_ICD_Mapping_v2": """Stores mappings of ICD codes to their descriptions and associated market names for medical diagnosis categorization. 
-Here is the schema information of the Table along with descriptions of each column: 
-- "ICD_Code": TEXT – International Classification of Diseases code. 
-- "Description": TEXT – Description of the ICD code, e.g., 'MALIGNANT NEOPLASM OF LEFT FALLOPIAN TUBE'. 
-- "Market_Name": TEXT – Name of the market associated with the ICD code, e.g., 'OVARIAN'. 
-
-""", 
+# "L3_HCP_Master_v2": """Stores detailed information about healthcare providers, including identifiers, contact details, specialties, segmentation, flags for program participation or statuses, and Key Opinion Leader status to support HCP management, sales targeting, and marketing analysis in a healthcare or pharmaceutical context. 
+# Here is the schema information of the Table along with descriptions of each column: 
+#     - "HCP_ID": TEXT – Unique identifier for the healthcare provider.  
+#     - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.  
+#     - "HCP_Name": TEXT – Name of the healthcare professional. Terms like HCP, healthcare provider, doctor or MD are used synonymously with healthcare professionals.  e.g., 'PAUL TIMOTHY MORRIS'.  
+#     - "HCP_Address": TEXT – Address of the healthcare provider.  
+#     - "HCP_City": TEXT – US City where the healthcare provider is located.  
+#     - "HCP_State": TEXT – State where the healthcare provider is located, e.g., 'HI'.  
+#     - "HCP_ZIP": INTEGER – US Postal code of the healthcare professional's practice. These are postal codes are generally of 5 digits.  
+#     - "HCP_Specialty": TEXT – This column identifies the area in which the HCP is certified, licensed, or primarily operates.   
+#     - "HCP_Specialty_Group": TEXT – Group of the specialty. Include "FM/IM" for Family Medicine/Internal Medicine, "NP/PA" for Nurse Practitioner/Physician Assistant, "Oncs" for Oncologists, "PCP" for Primary Care Physicians, and "Others" for all other specialties not separately listed.   
+#     - "HCP_Decile": INTEGER - Decile ranking of the healthcare provider.  
+#     - "HCP_Segment": TEXT – Segment classification of the healthcare provider, e.g., 'M'.  
+#     - "Target_Flag": TEXT – Indicates if the HCP is identified as a target for the sales representatives to call on or reach. Eg. Y or N  
+#     - "AMA_Flag": TEXT – American Medical Association flag, possibly indicating membership or status.  
+#     - "PDRP_Flag": TEXT – Flag for participation in a program, possibly related to data sharing or privacy.  
+#     - "Email": TEXT – Email address of the healthcare provider.  
+#     - "Phone_number": INTEGER – Phone number of the healthcare provider.  
+#     - "KOL": TEXT – Indicates if the healthcare provider is a Key Opinion Leader, e.g., 'Y' or 'N'.  
+#     """, 
 
  
 
-"L3_Inventory_Table_v2": """Stores inventory data, including levels, receipts, and shipments for products at specific locations, identified by NDC and location IDs. 
-Here is the schema information of the Table along with descriptions of each column: 
-    - "Week_Ending_Date": DATE – Closing date of the recorded week, marking the end of the data period. stored as a string in MM-DD-YYYY format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this.  
-    - "SP_SD_ID": TEXT – Unique identifier for the specialty pharmacy or specialty distributor. 
-    - "NDC": TEXT – National Drug Code for the product.  
-    - "SP_SD_Location": TEXT – Location of the specialty pharmacy or specialty distributor.  
-    - "SP_SD_Inventory": REAL – Total inventory of the specified healthcare product available at the specialty pharmacy and specialty distributor in the week across all territories.  
-    - "Qty_Received":– REAL Quantity of product received during the week.  
-    - "Qty_Shipped": – REAL Quantity of product shipped during the week 
-""", 
+# "L3_ICD_Mapping_v2": """Stores mappings of ICD codes to their descriptions and associated market names for medical diagnosis categorization. 
+# Here is the schema information of the Table along with descriptions of each column: 
+# - "ICD_Code": TEXT – International Classification of Diseases code. 
+# - "Description": TEXT – Description of the ICD code, e.g., 'MALIGNANT NEOPLASM OF LEFT FALLOPIAN TUBE'. 
+# - "Market_Name": TEXT – Name of the market associated with the ICD code, e.g., 'OVARIAN'. 
+
+# """, 
 
  
 
-"L3_Patient_Level_Master_v2": """Stores demographic information about patients, including gender, age, and birth year. 
-Here is the schema information of the Table along with descriptions of each column: 
-- "Patient_ID": INTEGER – Unique identifier for the patient. 
-- "Gender": TEXT – Gender of the patient, e.g., 'Male', 'Female'. 
-- "Age": INTEGER – Age of the patient. 
-- "Birth_Year": INTEGER – Year of birth of the patient. 
-""", 
+# "L3_Inventory_Table_v2": """Stores inventory data, including levels, receipts, and shipments for products at specific locations, identified by NDC and location IDs. 
+# Here is the schema information of the Table along with descriptions of each column: 
+#     - "Week_Ending_Date": DATE – Closing date of the recorded week, marking the end of the data period. stored as a string in MM-DD-YYYY format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this.  
+#     - "SP_SD_ID": TEXT – Unique identifier for the specialty pharmacy or specialty distributor. 
+#     - "NDC": TEXT – National Drug Code for the product.  
+#     - "SP_SD_Location": TEXT – Location of the specialty pharmacy or specialty distributor.  
+#     - "SP_SD_Inventory": REAL – Total inventory of the specified healthcare product available at the specialty pharmacy and specialty distributor in the week across all territories.  
+#     - "Qty_Received":– REAL Quantity of product received during the week.  
+#     - "Qty_Shipped": – REAL Quantity of product shipped during the week 
+# """, 
 
  
 
-"L3_Payer_Master_v2": """Stores information about insurance payers, including their names and the channels they operate in. 
-Here is the schema information of the Table along with descriptions of each column: 
-- "Payer_ID": INTEGER – Unique identifier for the payer. 
-- "Payer_Name": TEXT – Name of the payer, e.g., 'Advanced Health'. 
-- "Payer_Channel": TEXT – Channel of the payer, e.g., 'Commercial', 'Medicaid'. 
-""", 
-
-"L3_Plan_Master_v2": """Stores details about insurance plans offered by payers, including plan IDs, names, and the number of covered lives. 
-Here is the schema information of the Table along with descriptions of each column: 
-- "Payer_Name": TEXT – Name of the payer offering the plan. 
-- "Plan_ID": TEXT – Unique identifier for the plan. 
-- "Plan_Name": TEXT – Name of the plan, e.g., 'Advanced Health Plan'. 
-- "Covered_lives": INTEGER – Number of insured individuals covered under the payer.    
-""", 
+# "L3_Patient_Level_Master_v2": """Stores demographic information about patients, including gender, age, and birth year. 
+# Here is the schema information of the Table along with descriptions of each column: 
+# - "Patient_ID": INTEGER – Unique identifier for the patient. 
+# - "Gender": TEXT – Gender of the patient, e.g., 'Male', 'Female'. 
+# - "Age": INTEGER – Age of the patient. 
+# - "Birth_Year": INTEGER – Year of birth of the patient. 
+# """, 
 
  
 
-"L3_Product_Master_v2": """Stores catalog information about products, including their NDC, product IDs, names, descriptions, strengths, dosage forms, and market information. 
-Here is the schema information of the Table along with descriptions of each column: 
-    - "NDC": TEXT – National Drug Code for the product. 
-    - "Product_ID": TEXT – Unique identifier for the product. 
-    - "Product_Name": TEXT – Name of the product, e.g., 'Product_X'. 
-    - "Product_Description": TEXT – Description of the product, e.g., 'AROMATASE INHIB'. 
-    - "Strength": TEXT – Strength of the product, e.g., '5 ml'. 
-    - "Dosage_Form": TEXT – Form of the dosage, e.g., 'Injection'. 
-    - "Competitor_Flag": INTEGER – Indicates if the product is from a competitor (1) or not (0). 
-    - "Product_Group": TEXT – Group or category of the product, e.g., 'Targeted Therapy'. 
-    - "Market_ID": TEXT – Identifier for the market. 
-    - "Market_Name": TEXT – Name of the market, e.g., 'OVARIAN'. 
-    - "Product_Days_of_Supply": INTEGER – Days of supply for the product. 
+# "L3_Payer_Master_v2": """Stores information about insurance payers, including their names and the channels they operate in. 
+# Here is the schema information of the Table along with descriptions of each column: 
+# - "Payer_ID": INTEGER – Unique identifier for the payer. 
+# - "Payer_Name": TEXT – Name of the payer, e.g., 'Advanced Health'. 
+# - "Payer_Channel": TEXT – Channel of the payer, e.g., 'Commercial', 'Medicaid'. 
+# """, 
 
-""", 
-
-"L3_Roster_v2": """Stores detailed information about employee assignments to geographical areas, including employee details, roles, and dates related to employment and vacancies. 
-Here is the schema information of the Table along with descriptions of each column: 
-    - "Geo_level": TEXT – The level of geography, such as 'National'. 
-    - "Geo_ID": TEXT – Unique identifier for the geographical area. 
-    - "Geo_Name": TEXT – Name of the geographical area, e.g., 'East'. 
-    - "Emp_ID": TEXT – Unique identifier for the employee. 
-    - "Emp_Name": TEXT – Name of the employee. 
-    - "Emp_Role": TEXT – Role of the employee, e.g., 'NSD'. 
-    - "Emp_Email": TEXT – Email address of the employee. 
-    - "Emp_Start_date": DATE – Start date of the employee's assignment. 
-    - "Emp_End_date": DATE – End date of the employee's assignment, if applicable. 
-    - "IC_Start_Date": DATE – Start date for incentive compensation, if applicable. 
-    - "IC_End_Date": DATE – End date for incentive compensation, if applicable. 
-    - "Vacancy_Start_date": DATE – Start date of a vacancy period. 
-    - "Vacancy_End_date": DATE – End date of a vacancy period. 
-    - "Data_feed_date": DATE – Date when the data was fed or updated. 
-
-""", 
+# "L3_Plan_Master_v2": """Stores details about insurance plans offered by payers, including plan IDs, names, and the number of covered lives. 
+# Here is the schema information of the Table along with descriptions of each column: 
+# - "Payer_Name": TEXT – Name of the payer offering the plan. 
+# - "Plan_ID": TEXT – Unique identifier for the plan. 
+# - "Plan_Name": TEXT – Name of the plan, e.g., 'Advanced Health Plan'. 
+# - "Covered_lives": INTEGER – Number of insured individuals covered under the payer.    
+# """, 
 
  
 
-"L3_SD_Master_v2": """Stores detailed information about specialty distributors, including their identifiers and locations. 
-Here is the schema information of the Table along with descriptions of each column: 
-- "SD_ID": TEXT – Unique identifier for the specialty distributor. 
-- "SD_Location": TEXT – Location of the specialty distributor. 
-""", 
+# "L3_Product_Master_v2": """Stores catalog information about products, including their NDC, product IDs, names, descriptions, strengths, dosage forms, and market information. 
+# Here is the schema information of the Table along with descriptions of each column: 
+#     - "NDC": TEXT – National Drug Code for the product. 
+#     - "Product_ID": TEXT – Unique identifier for the product. 
+#     - "Product_Name": TEXT – Name of the product, e.g., 'Product_X'. 
+#     - "Product_Description": TEXT – Description of the product, e.g., 'AROMATASE INHIB'. 
+#     - "Strength": TEXT – Strength of the product, e.g., '5 ml'. 
+#     - "Dosage_Form": TEXT – Form of the dosage, e.g., 'Injection'. 
+#     - "Competitor_Flag": INTEGER – Indicates if the product is from a competitor (1) or not (0). 
+#     - "Product_Group": TEXT – Group or category of the product, e.g., 'Targeted Therapy'. 
+#     - "Market_ID": TEXT – Identifier for the market. 
+#     - "Market_Name": TEXT – Name of the market, e.g., 'OVARIAN'. 
+#     - "Product_Days_of_Supply": INTEGER – Days of supply for the product. 
+
+# """, 
+
+# "L3_Roster_v2": """Stores detailed information about employee assignments to geographical areas, including employee details, roles, and dates related to employment and vacancies. 
+# Here is the schema information of the Table along with descriptions of each column: 
+#     - "Geo_level": TEXT – The level of geography, such as 'National'. 
+#     - "Geo_ID": TEXT – Unique identifier for the geographical area. 
+#     - "Geo_Name": TEXT – Name of the geographical area, e.g., 'East'. 
+#     - "Emp_ID": TEXT – Unique identifier for the employee. 
+#     - "Emp_Name": TEXT – Name of the employee. 
+#     - "Emp_Role": TEXT – Role of the employee, e.g., 'NSD'. 
+#     - "Emp_Email": TEXT – Email address of the employee. 
+#     - "Emp_Start_date": DATE – Start date of the employee's assignment. 
+#     - "Emp_End_date": DATE – End date of the employee's assignment, if applicable. 
+#     - "IC_Start_Date": DATE – Start date for incentive compensation, if applicable. 
+#     - "IC_End_Date": DATE – End date for incentive compensation, if applicable. 
+#     - "Vacancy_Start_date": DATE – Start date of a vacancy period. 
+#     - "Vacancy_End_date": DATE – End date of a vacancy period. 
+#     - "Data_feed_date": DATE – Date when the data was fed or updated. 
+
+# """, 
 
  
 
-"L3_SD_Shipment_Table_v2": """Stores detailed information about shipments from standard distributors, capturing shipment and invoice details, product information, and account details. 
-Here is the schema information of the Table along with descriptions of each column: 
-- "Shipment_ID": INTEGER – Unique identifier for the shipment. 
-- "Shipment_Date": DATE – Date when the shipment was sent. 
-- "Invoice_ID": TEXT – Identifier for the invoice associated with the shipment. 
-- "Invoice_Date": DATE – Date of the invoice. 
-- "Product_ID": TEXT – Unique identifier for the product. 
-- "Product_Name": TEXT – Name of the product. 
-- "NDC": TEXT – National Drug Code for the product. 
-- "SD_Bottles": INTEGER – Number of the SD bottles distributed or sold to the account. 
-- "Account_ID": INTEGER – Unique identifier for the account. 
-- "Account_Name": TEXT – Identifies the Account name through which the healthcare product was sold. Terms such as Hospital or L1 are used synonymously with the term Account. 
-- "SD_ID": TEXT – Identifier for the specialty distributor. 
-- "SD_Location": TEXT – Location of the specialty distributor. 
-""", 
+# "L3_SD_Master_v2": """Stores detailed information about specialty distributors, including their identifiers and locations. 
+# Here is the schema information of the Table along with descriptions of each column: 
+# - "SD_ID": TEXT – Unique identifier for the specialty distributor. 
+# - "SD_Location": TEXT – Location of the specialty distributor. 
+# """, 
 
  
 
-"L3_SP_Master_v2": """Stores detailed information about specialty pharmacies, including their identifiers, names, and locations. 
-Here is the schema information of the Table along with descriptions of each column: 
-- "SP_ID": TEXT – Unique identifier for the specialty pharmacy. 
-- "SP_Name": TEXT – Name of the specialty pharmacy. 
-- "SP_Location": TEXT – Location of the specialty pharmacy. 
-""", 
+# "L3_SD_Shipment_Table_v2": """Stores detailed information about shipments from standard distributors, capturing shipment and invoice details, product information, and account details. 
+# Here is the schema information of the Table along with descriptions of each column: 
+# - "Shipment_ID": INTEGER – Unique identifier for the shipment. 
+# - "Shipment_Date": DATE – Date when the shipment was sent. 
+# - "Invoice_ID": TEXT – Identifier for the invoice associated with the shipment. 
+# - "Invoice_Date": DATE – Date of the invoice. 
+# - "Product_ID": TEXT – Unique identifier for the product. 
+# - "Product_Name": TEXT – Name of the product. 
+# - "NDC": TEXT – National Drug Code for the product. 
+# - "SD_Bottles": INTEGER – Number of the SD bottles distributed or sold to the account. 
+# - "Account_ID": INTEGER – Unique identifier for the account. 
+# - "Account_Name": TEXT – Identifies the Account name through which the healthcare product was sold. Terms such as Hospital or L1 are used synonymously with the term Account. 
+# - "SD_ID": TEXT – Identifier for the specialty distributor. 
+# - "SD_Location": TEXT – Location of the specialty distributor. 
+# """, 
 
  
 
-"L3_SP_Shipment_Table_v2": """Stores detailed information about shipments from specialty pharmacies, capturing patient and prescriber details, product information, and payer information. 
-    Here is the schema information of the Table along with descriptions of each column: 
-    - "Shipment_ID": INTEGER – Unique identifier for the shipment. 
-    - "Shipment_Date": DATE – Date when the shipment was sent. 
-    - "First_Shipment_Date": DATE – Date of the first shipment for the patient or prescription. 
-    - "New_Patient_Flag": INTEGER – Indicates if the patient is new (1) or existing (0). 
-    - "Patient_ID": INTEGER – Unique identifier for the patient. 
-    - "HCP_ID": TEXT – Unique identifier for the healthcare provider. 
-    - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.  
-    - "Rx_No": TEXT – Prescription number. 
-    - "Prescriber_Source": TEXT – Source of the prescription, e.g., 'PRESCRIBER', 'HUB'. 
-    - "SP_Bottles": REAL – Number of bottles shipped from the specialty pharmacy. 
-    - "Days_of_Supply": INTEGER – Days of supply for the shipment. 
-    - "Authorized_Refills": INTEGER – Number of authorized refills. 
-    - "Fill_number": INTEGER – The fill number for the prescription. 
-    - "Off_label_flag": TEXT – Indicates if the use is off-label, e.g., 'N' for no. 
-    - "Product_ID": TEXT – Unique identifier for the product. 
-    - "Product_Name": TEXT – Name of the product. 
-    - "NDC": TEXT – National Drug Code for the product. 
-    - "ICD_Code": TEXT – International Classification of Diseases code. 
-    - "SP_ID": TEXT – Identifier for the specialty pharmacy. 
-    - "SP_Name": TEXT – Name of the specialty pharmacy. 
-    - "SP_Location": TEXT – Location of the specialty pharmacy. 
-    - "Primary_Payer_ID": INTEGER – Identifier for the primary insurance payer. 
-    - "Primary_Plan_ID": TEXT – Identifier for the primary insurance plan. 
-    - "Secondary_Payer_ID": INTEGER – Identifier for the secondary insurance payer. 
-    - "Secondary_Plan_ID": TEXT – Identifier for the secondary insurance plan. 
-
-""", 
+# "L3_SP_Master_v2": """Stores detailed information about specialty pharmacies, including their identifiers, names, and locations. 
+# Here is the schema information of the Table along with descriptions of each column: 
+# - "SP_ID": TEXT – Unique identifier for the specialty pharmacy. 
+# - "SP_Name": TEXT – Name of the specialty pharmacy. 
+# - "SP_Location": TEXT – Location of the specialty pharmacy. 
+# """, 
 
  
 
-"L3_Target_and_Free_Sample_v2": """Stores detailed information about sales targets and free samples distributed, associated with territories and time periods. 
-Here is the schema information of the Table along with descriptions of each column: 
-    - "Territory_ID": TEXT – Unique identifier for the territory.  
-    - "Territory_Name": TEXT – Specifies the sales or operational territory of the account. The territory is used synonymously with "Region" and refers to a specific geographical area assigned in which the sales representatives operate.  
-    - "Week_Ending_Date": DATE Closing date of the recorded week, marking the end of the data period. stored as a string in MM-DD-YYYY format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this.  
-    - "Target_new_patients": INTEGER – Target number of new patients.  
-    - "Total_Target_patients": INTEGER – Total target number of patients.  
-    - "Target_Bottles": INTEGER – Target number of bottles.  
-    - "Free_samples": INTEGER – Number of free samples distributed during the week to the HCPs in the specified territory, often used as a promotional tactic.    
-    - "Target_Gross_Sales": INTEGER – Gross sales for the Target bottles in US dollars. 
-    - "Target_Net_Sales": INTEGER – Net sales after deductions, reflecting the actual earnings from product sales for the target bottles in US dollars . 
-""",  
+# "L3_SP_Shipment_Table_v2": """Stores detailed information about shipments from specialty pharmacies, capturing patient and prescriber details, product information, and payer information. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#     - "Shipment_ID": INTEGER – Unique identifier for the shipment. 
+#     - "Shipment_Date": DATE – Date when the shipment was sent. 
+#     - "First_Shipment_Date": DATE – Date of the first shipment for the patient or prescription. 
+#     - "New_Patient_Flag": INTEGER – Indicates if the patient is new (1) or existing (0). 
+#     - "Patient_ID": INTEGER – Unique identifier for the patient. 
+#     - "HCP_ID": TEXT – Unique identifier for the healthcare provider. 
+#     - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.  
+#     - "Rx_No": TEXT – Prescription number. 
+#     - "Prescriber_Source": TEXT – Source of the prescription, e.g., 'PRESCRIBER', 'HUB'. 
+#     - "SP_Bottles": REAL – Number of bottles shipped from the specialty pharmacy. 
+#     - "Days_of_Supply": INTEGER – Days of supply for the shipment. 
+#     - "Authorized_Refills": INTEGER – Number of authorized refills. 
+#     - "Fill_number": INTEGER – The fill number for the prescription. 
+#     - "Off_label_flag": TEXT – Indicates if the use is off-label, e.g., 'N' for no. 
+#     - "Product_ID": TEXT – Unique identifier for the product. 
+#     - "Product_Name": TEXT – Name of the product. 
+#     - "NDC": TEXT – National Drug Code for the product. 
+#     - "ICD_Code": TEXT – International Classification of Diseases code. 
+#     - "SP_ID": TEXT – Identifier for the specialty pharmacy. 
+#     - "SP_Name": TEXT – Name of the specialty pharmacy. 
+#     - "SP_Location": TEXT – Location of the specialty pharmacy. 
+#     - "Primary_Payer_ID": INTEGER – Identifier for the primary insurance payer. 
+#     - "Primary_Plan_ID": TEXT – Identifier for the primary insurance plan. 
+#     - "Secondary_Payer_ID": INTEGER – Identifier for the secondary insurance payer. 
+#     - "Secondary_Plan_ID": TEXT – Identifier for the secondary insurance plan. 
+
+# """, 
 
  
 
-"L3_Time_v2": """Stores a time dimension with various date-related attributes, including week, month, quarter, and year. 
-    Here is the schema information of the Table along with descriptions of each column: 
-    - "Date": DATE The specific date.  
-    - "Week_Ending_Date": DATE date of the recorded week, marking the end of the  
-    data period. stored as a string in MM-DD-YYYY format. The last day of the week is  
-    considered as the Friday of that week. You can use this to extract information like the  
-    date, week, month and year of the data collection from this.  
-    - "Week_Number": TEXT – Week number, e.g., 'W1-2010'.  
-    - "Month": TEXT – Month of the shipment, e.g., 'January-2024', 'February-2025', 'March-2024', 'April-2024', 'June-2025', 'July-2024'. Use this field if the question specifies a month, such as the latest month, recent month, or a specific month (e.g., Jan 2024). 
-    - "Quarter": TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December). This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on.  Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1 2024). 
-    - "Quarter_Start_Date": DATE Start date of the quarter.  
-    - "Quarter_End_Date": DATE End date of the quarter.  
-    - "Year": INTEGER – Year of the shipment. Use this field if the question specifies a year, such as the latest year, recent year, or a specific year (e.g., 2024). 
-
-""",  
+# "L3_Target_and_Free_Sample_v2": """Stores detailed information about sales targets and free samples distributed, associated with territories and time periods. 
+# Here is the schema information of the Table along with descriptions of each column: 
+#     - "Territory_ID": TEXT – Unique identifier for the territory.  
+#     - "Territory_Name": TEXT – Specifies the sales or operational territory of the account. The territory is used synonymously with "Region" and refers to a specific geographical area assigned in which the sales representatives operate.  
+#     - "Week_Ending_Date": DATE Closing date of the recorded week, marking the end of the data period. stored as a string in MM-DD-YYYY format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this.  
+#     - "Target_new_patients": INTEGER – Target number of new patients.  
+#     - "Total_Target_patients": INTEGER – Total target number of patients.  
+#     - "Target_Bottles": INTEGER – Target number of bottles.  
+#     - "Free_samples": INTEGER – Number of free samples distributed during the week to the HCPs in the specified territory, often used as a promotional tactic.    
+#     - "Target_Gross_Sales": INTEGER – Gross sales for the Target bottles in US dollars. 
+#     - "Target_Net_Sales": INTEGER – Net sales after deductions, reflecting the actual earnings from product sales for the target bottles in US dollars . 
+# """,  
 
  
 
-"L3_ZTT_Table_v2": """Stores detailed information mapping ZIP codes to territories, regions, and areas, providing a geographical hierarchy. 
-Here is the schema information of the Table along with descriptions of each column: 
-    - "ZIP": INTEGER – ZIP code.  
-    - "State": TEXT – State abbreviation.  
-   - "City": TEXT – City name.  
-    - "Territory_ID": TEXT – Unique identifier for the territory.  
-    - "Territory_Name": TEXT –Specifies the sales or operational territory of the account. The  
-    territory is used synonymously with "Region" and refers to a specific geographical area  
-    assigned in which the sales representatives operate.  
-    - "Region_ID": TEXT – Unique identifier for the region.  
-    - "Region_Name": TEXT – Name of the region.  
-    - "Area_ID": TEXT – Unique identifier for the area.  
-    - "Area_Name": TEXT – Name of the area.  
-""",   
+# "L3_Time_v2": """Stores a time dimension with various date-related attributes, including week, month, quarter, and year. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#     - "Date": DATE The specific date.  
+#     - "Week_Ending_Date": DATE date of the recorded week, marking the end of the  
+#     data period. stored as a string in MM-DD-YYYY format. The last day of the week is  
+#     considered as the Friday of that week. You can use this to extract information like the  
+#     date, week, month and year of the data collection from this.  
+#     - "Week_Number": TEXT – Week number, e.g., 'W1-2010'.  
+#     - "Month": TEXT – Month of the shipment, e.g., 'January-2024', 'February-2025', 'March-2024', 'April-2024', 'June-2025', 'July-2024'. Use this field if the question specifies a month, such as the latest month, recent month, or a specific month (e.g., Jan 2024). 
+#     - "Quarter": TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December). This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on.  Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1 2024). 
+#     - "Quarter_Start_Date": DATE Start date of the quarter.  
+#     - "Quarter_End_Date": DATE End date of the quarter.  
+#     - "Year": INTEGER – Year of the shipment. Use this field if the question specifies a year, such as the latest year, recent year, or a specific year (e.g., 2024). 
+
+# """,  
 
  
 
-"L3_Call_Detail_Table_v2": """Stores detailed information about specific call details, capturing products discussed during sales representative interactions with healthcare providers, including call identifiers, dates, priorities, medical indications, and product details to support sales activity tracking and product promotion analysis in a healthcare or pharmaceutical context. 
-    Here is the schema information of the Table along with descriptions of each column: 
-    - "Call_Detail_ID": TEXT – Unique identifier for the call detail record. 
-    - "Call_ID": TEXT – Unique identifier for the call, linking to the parent call record. 
-    - "Call_Date": DATE – Date when the call or interaction occurred. 
-    - "Priority": TEXT – Priority level of the call, e.g., 'P1'. 
-    - "Indication": TEXT – Medical indication for the product discussed, e.g., 'ER/PR+' or 'BRCA1/BRCA'. 
-    - "Product_ID": TEXT – Unique identifier for the product discussed. 
-    - "Product_Name": TEXT – Name of the product discussed, e.g., 'Onc_Brand_A'. 
-    """, 
+# "L3_ZTT_Table_v2": """Stores detailed information mapping ZIP codes to territories, regions, and areas, providing a geographical hierarchy. 
+# Here is the schema information of the Table along with descriptions of each column: 
+#     - "ZIP": INTEGER – ZIP code.  
+#     - "State": TEXT – State abbreviation.  
+#    - "City": TEXT – City name.  
+#     - "Territory_ID": TEXT – Unique identifier for the territory.  
+#     - "Territory_Name": TEXT –Specifies the sales or operational territory of the account. The  
+#     territory is used synonymously with "Region" and refers to a specific geographical area  
+#     assigned in which the sales representatives operate.  
+#     - "Region_ID": TEXT – Unique identifier for the region.  
+#     - "Region_Name": TEXT – Name of the region.  
+#     - "Area_ID": TEXT – Unique identifier for the area.  
+#     - "Area_Name": TEXT – Name of the area.  
+# """,   
 
  
 
-"L3_Call_Table_v2": """Stores information about sales representative calls to healthcare providers, capturing call identifiers, dates, employee and healthcare provider details, geographical territories, audience, interaction focus, call type, and market information to support sales activity tracking, territory management, and marketing analysis in a healthcare or pharmaceutical context. 
-    Here is the schema information of the Table along with descriptions of each column: 
-    - "Call_ID": TEXT – Unique identifier for the call. 
-    - "Call_date": DATE – Date when the call or interaction occurred. 
-    - "Territory ID": TEXT – Identifier for the sales territory. 
-    - "Emp_ID": TEXT – Unique identifier for the employee making the call. 
-    - "Emp_Name": TEXT – Name of the employee, e.g., 'Michelle Rivera'. 
-    - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits. 
-    - "HCP_Name": TEXT – Name of the healthcare professional. Terms like HCP, healthcare provider, doctor or MD are used synonymously with healthcare professionals. e.g., 'BRIAN KEITH TURPIN'.  
-    - "HCP_State": TEXT – State where the healthcare provider is located, e.g., 'OH'. 
-    - "Decile": INTEGER – Decile ranking of the healthcare provider. 
-    - "Audience": TEXT – Target audience for the call, e.g., 'MD'. 
-    - "Interaction_focus": TEXT – Focus of the interaction, e.g., 'Educational'. 
-    - "Call_Type": TEXT – Type of call, e.g., 'Virtual'. 
-    - "Market_ID": TEXT – Identifier for the market. 
-    - "Market_Name": TEXT – Name of the market, e.g., 'OVARIAN'. 
-    """, 
- 
-
-"L3_Digital_Campaigns_v2": """Stores information about digital marketing campaigns targeting healthcare providers, capturing campaign event identifiers, healthcare provider identifiers, dates, engagement types, and publisher details to support digital marketing analysis and campaign performance tracking in a healthcare or pharmaceutical context. 
-    Here is the schema information of the Table along with descriptions of each column: 
-    - "Record_ID": TEXT – Unique identifier for the campaign record. 
-    - "Event_ID": TEXT – Unique identifier for the digital campaign event. 
-    - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.   
-    - "Date": DATE – Date when the engagement occurred. 
-    - "Engagement_type": TEXT – Type of engagement, e.g., 'Impression' or 'Click'. 
-    - "Publisher": TEXT – Name of the publisher or platform, e.g., 'Pulse Point'. 
-    - "Channel": TEXT – Channel used for the campaign, e.g., 'Display'. 
-    """, 
+# "L3_Call_Detail_Table_v2": """Stores detailed information about specific call details, capturing products discussed during sales representative interactions with healthcare providers, including call identifiers, dates, priorities, medical indications, and product details to support sales activity tracking and product promotion analysis in a healthcare or pharmaceutical context. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#     - "Call_Detail_ID": TEXT – Unique identifier for the call detail record. 
+#     - "Call_ID": TEXT – Unique identifier for the call, linking to the parent call record. 
+#     - "Call_Date": DATE – Date when the call or interaction occurred. 
+#     - "Priority": TEXT – Priority level of the call, e.g., 'P1'. 
+#     - "Indication": TEXT – Medical indication for the product discussed, e.g., 'ER/PR+' or 'BRCA1/BRCA'. 
+#     - "Product_ID": TEXT – Unique identifier for the product discussed. 
+#     - "Product_Name": TEXT – Name of the product discussed, e.g., 'Onc_Brand_A'. 
+#     """, 
 
  
 
-"L3_Email_Campaigns_v2": """Stores information about email marketing campaigns targeting healthcare providers, capturing campaign event identifiers, healthcare provider identifiers, dates, engagement types, channels, and publisher details to support email marketing analysis and campaign performance tracking in a healthcare or pharmaceutical context. 
-   Here is the schema information of the Table along with descriptions of each column: 
-    - "Record_ID": TEXT – Unique identifier for the email campaign record. 
-    - "Date": DATE – Date when the engagement occurred. 
-    - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits. 
-    - "Channel": TEXT – Channel used for the campaign, e.g., 'Email'. 
-    - "Engagement_Type": TEXT – Type of engagement, e.g., 'Sent' or 'Open'. 
-    - "Publisher": TEXT – Name of the publisher or platform, e.g., 'ASCO'. 
-    - "Event_ID": TEXT – Unique identifier for the email campaign event. 
-   """, 
+# "L3_Call_Table_v2": """Stores information about sales representative calls to healthcare providers, capturing call identifiers, dates, employee and healthcare provider details, geographical territories, audience, interaction focus, call type, and market information to support sales activity tracking, territory management, and marketing analysis in a healthcare or pharmaceutical context. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#     - "Call_ID": TEXT – Unique identifier for the call. 
+#     - "Call_date": DATE – Date when the call or interaction occurred. 
+#     - "Territory ID": TEXT – Identifier for the sales territory. 
+#     - "Emp_ID": TEXT – Unique identifier for the employee making the call. 
+#     - "Emp_Name": TEXT – Name of the employee, e.g., 'Michelle Rivera'. 
+#     - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits. 
+#     - "HCP_Name": TEXT – Name of the healthcare professional. Terms like HCP, healthcare provider, doctor or MD are used synonymously with healthcare professionals. e.g., 'BRIAN KEITH TURPIN'.  
+#     - "HCP_State": TEXT – State where the healthcare provider is located, e.g., 'OH'. 
+#     - "Decile": INTEGER – Decile ranking of the healthcare provider. 
+#     - "Audience": TEXT – Target audience for the call, e.g., 'MD'. 
+#     - "Interaction_focus": TEXT – Focus of the interaction, e.g., 'Educational'. 
+#     - "Call_Type": TEXT – Type of call, e.g., 'Virtual'. 
+#     - "Market_ID": TEXT – Identifier for the market. 
+#     - "Market_Name": TEXT – Name of the market, e.g., 'OVARIAN'. 
+#     """, 
+ 
+
+# "L3_Digital_Campaigns_v2": """Stores information about digital marketing campaigns targeting healthcare providers, capturing campaign event identifiers, healthcare provider identifiers, dates, engagement types, and publisher details to support digital marketing analysis and campaign performance tracking in a healthcare or pharmaceutical context. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#     - "Record_ID": TEXT – Unique identifier for the campaign record. 
+#     - "Event_ID": TEXT – Unique identifier for the digital campaign event. 
+#     - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.   
+#     - "Date": DATE – Date when the engagement occurred. 
+#     - "Engagement_type": TEXT – Type of engagement, e.g., 'Impression' or 'Click'. 
+#     - "Publisher": TEXT – Name of the publisher or platform, e.g., 'Pulse Point'. 
+#     - "Channel": TEXT – Channel used for the campaign, e.g., 'Display'. 
+#     """, 
 
  
 
-"L3_Speaker_Program_v2": """Stores information about speaker programs involving healthcare providers, capturing event details, speaker names, event types, locations, and healthcare provider identifiers to support event tracking, marketing analysis, and speaker program management in a healthcare or pharmaceutical context. 
+# "L3_Email_Campaigns_v2": """Stores information about email marketing campaigns targeting healthcare providers, capturing campaign event identifiers, healthcare provider identifiers, dates, engagement types, channels, and publisher details to support email marketing analysis and campaign performance tracking in a healthcare or pharmaceutical context. 
+#    Here is the schema information of the Table along with descriptions of each column: 
+#     - "Record_ID": TEXT – Unique identifier for the email campaign record. 
+#     - "Date": DATE – Date when the engagement occurred. 
+#     - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits. 
+#     - "Channel": TEXT – Channel used for the campaign, e.g., 'Email'. 
+#     - "Engagement_Type": TEXT – Type of engagement, e.g., 'Sent' or 'Open'. 
+#     - "Publisher": TEXT – Name of the publisher or platform, e.g., 'ASCO'. 
+#     - "Event_ID": TEXT – Unique identifier for the email campaign event. 
+#    """, 
 
  
 
-Here is the schema information of the Table along with descriptions of each column: 
-- "Record_ID": TEXT – Unique identifier for the speaker program record. 
-- "Event_Date": TEXT – Date when the speaker program occurred. 
-- "Speaker_Program_ID": TEXT – Unique identifier for the speaker program event. 
-- "Speaker_Name": TEXT – Name of the speaker, e.g., 'Ethan Lee'. 
-- "Event_Type": TEXT – Type of event, e.g., 'In-Person'. 
-- "Event_City": TEXT – City where the event took place, e.g., 'Boston'. 
-- "Event_State": TEXT – State where the event took place, e.g., 'Massachusetts'. 
-- "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.   
-
-""", 
+# "L3_Speaker_Program_v2": """Stores information about speaker programs involving healthcare providers, capturing event details, speaker names, event types, locations, and healthcare provider identifiers to support event tracking, marketing analysis, and speaker program management in a healthcare or pharmaceutical context. 
 
  
 
-"L3_Patient_Status_table_v2": """Stores detailed information about patient status tracking and progression, capturing status updates, prescriber sources, specialty pharmacy assignments, and comprehensive status codes to support patient care monitoring, referral management, and care coordination tracking in a healthcare or pharmaceutical context.  
-    Here is the schema information of the Table along with descriptions of each column:  
-        - "Record_ID": TEXT – Unique identifier for each status record, e.g., 'R1000001'.  
-        - "Patient_ID": INTEGER – Unique identifier for the patient, e.g., '1000001'.  
-        - "SP_ID": TEXT – Identifier for the specialty pharmacy, if applicable, e.g., 'SP00001'. Can be empty for certain status types.  
-        - "Status_Date": DATE Date when the status was recorded or updated, e.g., '11/19/2023'.  
-        - "Prescriber_Source": TEXT – Source of the prescription or referral, e.g., 'Hub', 'Prescriber'.  
-        - "Status": TEXT – Current status category of the patient, e.g., 'Pending', 'Active', 'Discontinued', 'Cancelled'.  
-        - "Status_Code": TEXT – Specific code representing the detailed status, e.g., 'P100', 'PA0301', 'A01', 'DC23'.  
-       - "Status_Description": TEXT – Detailed description of the status, e.g., 'REFERRAL REFERRAL CREATED', 'ACTIVE:ON THERAPY:SHIPMENT CONFIRMED', 'Order Shipped', 'Patient Choice - Other'.  
+# Here is the schema information of the Table along with descriptions of each column: 
+# - "Record_ID": TEXT – Unique identifier for the speaker program record. 
+# - "Event_Date": TEXT – Date when the speaker program occurred. 
+# - "Speaker_Program_ID": TEXT – Unique identifier for the speaker program event. 
+# - "Speaker_Name": TEXT – Name of the speaker, e.g., 'Ethan Lee'. 
+# - "Event_Type": TEXT – Type of event, e.g., 'In-Person'. 
+# - "Event_City": TEXT – City where the event took place, e.g., 'Boston'. 
+# - "Event_State": TEXT – State where the event took place, e.g., 'Massachusetts'. 
+# - "NPI": INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits.   
 
-        """, 
+# """, 
 
  
 
-"L3_Competitor_Table_v2":""" 
-Stores detailed information about the usage of competitor products by healthcare providers, including the number of patients using competitor products, new prescriptions (NBRx), and patients new to therapy, aggregated by quarter and week. This table supports competitive analysis, market share tracking, and sales strategy development in a healthcare or pharmaceutical context. 
-    Here is the schema information of the Table along with descriptions of each column: 
-    - Quarter: TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December), e.g., 'Q1-2024'. This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on. Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1 2024). 
-   - Week_Ending_Date: DATE – Closing date of the recorded week, marking the end of the data period. stored as a string in YYYY-MM-DD  format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this. 
-    - NPI: INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits, e.g., '1003023045'. 
-    - Num_Patients_Competitor_Products: INTEGER – Number of patients using competitor products prescribed by the healthcare provider during the specified week, e.g., '18'. 
-    - NBRx: INTEGER – Number of new prescriptions written for competitor products by the healthcare provider during the specified week, e.g., '8'. 
-    - New_to_Therapy: INTEGER – Number of patients who are new to therapy with competitor products during the specified week, e.g., '4'. """ 
+# "L3_Patient_Status_table_v2": """Stores detailed information about patient status tracking and progression, capturing status updates, prescriber sources, specialty pharmacy assignments, and comprehensive status codes to support patient care monitoring, referral management, and care coordination tracking in a healthcare or pharmaceutical context.  
+#     Here is the schema information of the Table along with descriptions of each column:  
+#         - "Record_ID": TEXT – Unique identifier for each status record, e.g., 'R1000001'.  
+#         - "Patient_ID": INTEGER – Unique identifier for the patient, e.g., '1000001'.  
+#         - "SP_ID": TEXT – Identifier for the specialty pharmacy, if applicable, e.g., 'SP00001'. Can be empty for certain status types.  
+#         - "Status_Date": DATE Date when the status was recorded or updated, e.g., '11/19/2023'.  
+#         - "Prescriber_Source": TEXT – Source of the prescription or referral, e.g., 'Hub', 'Prescriber'.  
+#         - "Status": TEXT – Current status category of the patient, e.g., 'Pending', 'Active', 'Discontinued', 'Cancelled'.  
+#         - "Status_Code": TEXT – Specific code representing the detailed status, e.g., 'P100', 'PA0301', 'A01', 'DC23'.  
+#        - "Status_Description": TEXT – Detailed description of the status, e.g., 'REFERRAL REFERRAL CREATED', 'ACTIVE:ON THERAPY:SHIPMENT CONFIRMED', 'Order Shipped', 'Patient Choice - Other'.  
+
+#         """, 
+
+ 
+
+# "L3_Competitor_Table_v2":""" 
+# Stores detailed information about the usage of competitor products by healthcare providers, including the number of patients using competitor products, new prescriptions (NBRx), and patients new to therapy, aggregated by quarter and week. This table supports competitive analysis, market share tracking, and sales strategy development in a healthcare or pharmaceutical context. 
+#     Here is the schema information of the Table along with descriptions of each column: 
+#     - Quarter: TEXT – Denotes a three-month period within a fiscal year used for financial reporting, typically divided as Q1 (January-March), Q2 (April-June), Q3 (July-September), and Q4 (October-December), e.g., 'Q1-2024'. This field contains values such as Q1-2024, Q2-2024, Q3-2024, Q4-2024, Q1-2025, and so on. Use this field if the question specifies a quarter, such as the latest quarter, recent quarter, or a specific quarter (e.g., Q1 2024). 
+#    - Week_Ending_Date: DATE – Closing date of the recorded week, marking the end of the data period. stored as a string in YYYY-MM-DD  format. The last day of the week is considered as the Friday of that week. You can use this to extract information like the date, week, month and year of the data collection from this. 
+#     - NPI: INTEGER – Unique identifier for each healthcare professional as per the National Provider Identifier standard. The NPI ID is generally of 10 digits, e.g., '1003023045'. 
+#     - Num_Patients_Competitor_Products: INTEGER – Number of patients using competitor products prescribed by the healthcare provider during the specified week, e.g., '18'. 
+#     - NBRx: INTEGER – Number of new prescriptions written for competitor products by the healthcare provider during the specified week, e.g., '8'. 
+#     - New_to_Therapy: INTEGER – Number of patients who are new to therapy with competitor products during the specified week, e.g., '4'. """ 
 
  
 

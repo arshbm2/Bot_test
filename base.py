@@ -320,7 +320,7 @@ def complexity_analysis_node(state: State):
         
         return {
             "complexity_analysis": complexity_analysis,
-            "use_iterative_approach": complexity_analysis.needs_decomposition
+            "use_iterative_approach": True
         }
         
     except Exception as e:
@@ -346,10 +346,13 @@ def decomposition_node(state: State):
         question = state.get("question", "")
         table_metadata = state.get("table_metadata", "")
         complexity_analysis = state.get("complexity_analysis")
+        tables_description=get_table_descriptions()
+        tables_info = "\n".join([f"- {name}: {desc}" for name, desc in tables_description.items()])
+    
         
-        if not complexity_analysis or not complexity_analysis.needs_decomposition:
-            # print(f"[DEBUG] decomposition_node - No decomposition needed, skipping")
-            return {}
+        # if not complexity_analysis or not complexity_analysis.needs_decomposition:
+        #     # print(f"[DEBUG] decomposition_node - No decomposition needed, skipping")
+        #     return {}
         
         # Format conversation history
         conversation = state.get("conversation", [])
@@ -361,7 +364,7 @@ def decomposition_node(state: State):
         
         inputs = {
             "question": question,
-            "table_metadata": table_metadata,
+            "table_info": tables_info,
             "history": history_text,
             "complexity_reasons": complexity_analysis.complexity_reasons
         }
@@ -381,7 +384,9 @@ def decomposition_node(state: State):
         
         # Extract sub-queries from the response using MAG-SQL pattern
         import re
-        subquery_pattern = r"##Subquery:\s*(.+?)(?=##|$)"
+        # subquery_pattern = r"##Subquery:\s*(.+?)(?=##|$)"
+        # subquery_pattern = r"##Subquery[_\d]*:\s*(.+?)(?=##|$)"
+        subquery_pattern = r"(?:##|\*\*)Subquery[_\d]*:?[\*]*\s*(.+?)(?=(?:##|\*\*)Subquery|$)" 
         matches = re.findall(subquery_pattern, decomposition_text, re.DOTALL)
         
         for i, subquery_text in enumerate(matches):
@@ -492,8 +497,8 @@ def iterative_query_execution_node(state: State):
         response = llm.invoke(sub_question_prompt)
         query_text = response.content
         
-        print(f"[DEBUG] MAG-SQL Query Generation Response:")
-        print(f"[DEBUG] {query_text}")
+        # print(f"[DEBUG] MAG-SQL Query Generation Response:")
+        # print(f"[DEBUG] {query_text}")
         
         # Extract SQL query from the response
         import re
@@ -517,12 +522,12 @@ def iterative_query_execution_node(state: State):
             needs_guidance=False
         )
         
-        print(f"[DEBUG] Sub-question {sub_question_index + 1} - Question: {current_sub_question.question}")
-        print(f"[DEBUG] Sub-question {sub_question_index + 1} - Purpose: {current_sub_question.purpose}")
-        print(f"[DEBUG] Sub-question {sub_question_index + 1} - Previous SQL: {previous_sql}")
-        print(f"[DEBUG] Sub-question {sub_question_index + 1} - Generated Query: {query_analysis.sql_query}")
-        print(f"[DEBUG] Sub-question {sub_question_index + 1} - Confidence: {query_analysis.confidence_score}")
-        print(f"[DEBUG] Sub-question {sub_question_index + 1} - Progressive Building: {'YES' if not is_first_subquestion else 'NO (First iteration)'}")
+        # print(f"[DEBUG] Sub-question {sub_question_index + 1} - Question: {current_sub_question.question}")
+        # print(f"[DEBUG] Sub-question {sub_question_index + 1} - Purpose: {current_sub_question.purpose}")
+        # print(f"[DEBUG] Sub-question {sub_question_index + 1} - Previous SQL: {previous_sql}")
+        # print(f"[DEBUG] Sub-question {sub_question_index + 1} - Generated Query: {query_analysis.sql_query}")
+        # print(f"[DEBUG] Sub-question {sub_question_index + 1} - Confidence: {query_analysis.confidence_score}")
+        # print(f"[DEBUG] Sub-question {sub_question_index + 1} - Progressive Building: {'YES' if not is_first_subquestion else 'NO (First iteration)'}")
         
         # Execute the query with retry logic
         max_retries = 2
@@ -533,7 +538,7 @@ def iterative_query_execution_node(state: State):
             try:
                 from tools import execute_db_query
                 result = execute_db_query(query_analysis.sql_query)
-                print(f"[DEBUG] Query executed successfully (attempt {retry_count + 1}), result type: {type(result)}")
+                # print(f"[DEBUG] Query executed successfully (attempt {retry_count + 1}), result type: {type(result)}")
                 if isinstance(result, dict) and "result" in result:
                     print(f"[DEBUG] Raw database result: {repr(result['result'])}")
                 else:
