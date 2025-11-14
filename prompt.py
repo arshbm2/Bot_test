@@ -10,7 +10,7 @@ query_gen_prompt="""
     
     ## B.WORKFLOW:
     1. Generate a syntactically correct SQLite query based on the user's question and provided context.
-    2. Provide the query in the structured format with reasoning, confidence score, and potential error identification.
+    2. Provide only the SQLite query. Do not provide anything in addition to the SQLite query as output as your response will be fed to the database engine directly. 
     3. The query will be automatically executed by the system after your structured response.
 
     ## MANDATORY REASONING AND QUERY GENERATION WORKFLOW:
@@ -544,7 +544,7 @@ def get_decomposition_prompt(inputs):
     """
     
     question = inputs.get("question", "")
-    table_metadata = inputs.get("table_metadata", "")
+    table_info = inputs.get("table_info", "")
     history = inputs.get("history", "")
     complexity_reasons = inputs.get("complexity_reasons", [])
     
@@ -555,6 +555,12 @@ Given a 【query】, you need to understand the intent of Query, and then decomp
 For the case where Conditions is NULL, consider Targets as the final Subquery directly. 
 For the case where Conditions are not NULL, combine Targets and the first Condition to get the first Subquery, then combine this Subquery and the next Condition into a new Subquery until all Conditions are used (which means the content of the last Subquery and the original Query is the same).
 
+- If the 【metadata】 indicates that the Query involves multiple distinct tables or entities, decompose the Query 
+into separate Subqueries for each table first. 
+Then, describe how these Subqueries should be combined based on common keys (e.g., HCP_ID) to form the 
+final integrated Subquery.
+
+
 [Requirements]
 -Try not to overlap Targets and Conditions.
 -Make sure the decomposed Target and Condition can cover all of the information in Query.
@@ -563,6 +569,26 @@ For the case where Conditions are not NULL, combine Targets and the first Condit
 
 Here are some examples:
 ==========
+
+【Query】
+List the HCPs who wrote more than 5 prescriptions and had more than 2 calls in 2025.
+【Evidence】
+NULL
+
+【Decomposition】
+Targets: List the HCPs
+Conditions:
+1. who wrote more than 5 prescriptions in 2025 (from Prescriptions table) --Condition_1
+2. who had more than 2 calls in 2025 (from Calls table) --Condition_2
+
+Subqueries:
+1. Since the conditions refer to two different tables, decompose into independent subqueries first.
+##Subquery_1: From Prescriptions table, list HCP_IDs who wrote more than 5 prescriptions in 2025
+##Subquery_2: From Calls table, list HCP_IDs who had more than 2 calls in 2025
+2. Combine the results from Subquery_1 and Subquery_2 using HCP_ID to get the final result.
+##Subquery_3: List HCPs who wrote more than 5 prescriptions in 2025 and had more than 2 calls in 2025
+
+==============
 
 【Query】
 Show the stadium name and the number of concerts in each stadium. Please also list the year the stadium was built. 
@@ -641,6 +667,8 @@ Here is a new query need to be decomposed:
 {question}
 【Evidence】
 {evidence}
+【metadata】
+{table_info}
 
 【Decomposition】
 """
@@ -652,7 +680,8 @@ Here is a new query need to be decomposed:
     
     return prompt.format(
         question=question,
-        evidence=evidence
+        evidence=evidence, 
+        table_info=table_info
     )
 
 def get_sub_question_query_prompt(inputs):
@@ -691,12 +720,8 @@ Generate a base SQLite query that answers this specific sub-question. This will 
 6. **Prepare for Extension**: Structure the query so it can be extended in future iterations
 
 ## OUTPUT FORMAT
-Provide your response in the structured format with:
-- sql_query: The complete SQLite query
-- confidence_score: Your confidence in this query (0.0-1.0)
-- reasoning: Brief explanation of how this query answers the sub-question
-- potential_errors: Any potential issues with this query
-- needs_guidance: Whether clarification is needed (usually false for sub-questions)
+1. Provide onProvide only the SQLite query. 
+2. Do not provide anything in addition to the SQLite query as output as your response will be fed to the database engine directly.
 
 ## CONTEXT
 Table Metadata: {table_metadata}
@@ -754,12 +779,8 @@ GROUP BY s.Territory, s.Sales
 ```
 
 ## OUTPUT FORMAT
-Provide your response in the structured format with:
-- sql_query: The complete SQLite query that extends the previous one
-- confidence_score: Your confidence in this query (0.0-1.0)
-- reasoning: Brief explanation of how this query extends the previous one
-- potential_errors: Any potential issues with this query
-- needs_guidance: Whether clarification is needed (usually false for sub-questions)
+1. Provide onProvide only the SQLite query. 
+2. Do not provide anything in addition to the SQLite query as output as your response will be fed to the database engine directly.
 
 ## CONTEXT
 Table Metadata: {table_metadata}
